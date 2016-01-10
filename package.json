@@ -1,0 +1,27 @@
+{
+  "name": "language-tnsdl",
+  "author": {
+    "name": "Tibor Simon",
+    "email": "tibor@tiborsimon.io"
+  },
+  "version": "1.0.0",
+  "description": "A short description of your package",
+  "keywords": [
+    "tnsdl",
+    "telecommunication",
+    "grammar",
+    "syntax"
+  ],
+  "readmeFilename": "README.md",
+  "homepage": "https://atom.github.io/language-python",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tiborsimon/language-tnsdl.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+  }
+}
