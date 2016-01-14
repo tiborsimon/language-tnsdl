@@ -1,62 +1,19 @@
-LanguageTnsdl = require '../lib/language-tnsdl'
-
-# Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
-#
-# To run a specific `it` or `describe` block add an `f` to the front (e.g. `fit`
-# or `fdescribe`). Remove the `f` to unfocus the block.
-
-describe "LanguageTnsdl", ->
-  [workspaceElement, activationPromise] = []
+describe "TNSDL grammar", ->
+  grammar = null
 
   beforeEach ->
-    workspaceElement = atom.views.getView(atom.workspace)
-    activationPromise = atom.packages.activatePackage('language-tnsdl')
+    waitsForPromise ->
+      atom.packages.activatePackage("language-tnsdl")
 
-  describe "when the language-tnsdl:toggle event is triggered", ->
-    it "hides and shows the modal panel", ->
-      # Before the activation event the view is not on the DOM, and no panel
-      # has been created
-      expect(workspaceElement.querySelector('.language-tnsdl')).not.toExist()
+    runs ->
+      grammar = atom.grammars.grammarForScopeName("source.tnsdl")
 
-      # This is an activation event, triggering it will cause the package to be
-      # activated.
-      atom.commands.dispatch workspaceElement, 'language-tnsdl:toggle'
+  it "parses the grammar", ->
+    expect(grammar).toBeDefined()
+    expect(grammar.scopeName).toBe "source.tnsdl"
 
-      waitsForPromise ->
-        activationPromise
+  it "parses block comments", ->
+    tokens = grammar.tokenizeLines('/* hello */')
 
-      runs ->
-        expect(workspaceElement.querySelector('.language-tnsdl')).toExist()
-
-        languageTnsdlElement = workspaceElement.querySelector('.language-tnsdl')
-        expect(languageTnsdlElement).toExist()
-
-        languageTnsdlPanel = atom.workspace.panelForItem(languageTnsdlElement)
-        expect(languageTnsdlPanel.isVisible()).toBe true
-        atom.commands.dispatch workspaceElement, 'language-tnsdl:toggle'
-        expect(languageTnsdlPanel.isVisible()).toBe false
-
-    it "hides and shows the view", ->
-      # This test shows you an integration test testing at the view level.
-
-      # Attaching the workspaceElement to the DOM is required to allow the
-      # `toBeVisible()` matchers to work. Anything testing visibility or focus
-      # requires that the workspaceElement is on the DOM. Tests that attach the
-      # workspaceElement to the DOM are generally slower than those off DOM.
-      jasmine.attachToDOM(workspaceElement)
-
-      expect(workspaceElement.querySelector('.language-tnsdl')).not.toExist()
-
-      # This is an activation event, triggering it causes the package to be
-      # activated.
-      atom.commands.dispatch workspaceElement, 'language-tnsdl:toggle'
-
-      waitsForPromise ->
-        activationPromise
-
-      runs ->
-        # Now we can test for view visibility
-        languageTnsdlElement = workspaceElement.querySelector('.language-tnsdl')
-        expect(languageTnsdlElement).toBeVisible()
-        atom.commands.dispatch workspaceElement, 'language-tnsdl:toggle'
-        expect(languageTnsdlElement).not.toBeVisible()
+    expect(tokens[0][0].value).toBe '/* hello */'
+    expect(tokens[0][0].scopes).toEqual ['source.tnsdl', 'comment.block.tnsdl']
