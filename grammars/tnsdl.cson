@@ -1,0 +1,9 @@
+'scopeName': 'source.tnsdl'
+'name': 'TNSDL'
+'fileTypes': [
+  'sdl'
+  'sdt'
+  'sst'
+  'in2'
+  'in3'
+]
