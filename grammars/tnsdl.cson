@@ -7,3 +7,11 @@
   'in2'
   'in3'
 ]
+'patterns': [
+  {
+    'begin': '^/\\*'
+    'end': '\\*/$'
+    'name': 'comment.block.tnsdl'
+  }
+
+]
